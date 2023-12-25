@@ -1,44 +1,48 @@
-import { StyleSheet, Text, View, Button } from "react-native";
-import MyComp from "./src/MyComp";
+import { StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import GoalsInput from "./src/components/GoalsInput";
+import GoalsList from "./src/components/GoalsList";
 
 export default function App() {
+  const [goals, setGoals] = useState([]);
+  const [textInput, setTextInput] = useState("");
+
+  const textInputHandler = (text) => {
+    setTextInput(text);
+  };
+
+  const addGoalHandler = (textInput) => {
+    setGoals([
+      ...goals,
+      {
+        id: goals.length > 0 ? goals[goals.length - 1].id + 1 : 0,
+        text: textInput,
+      },
+    ]);
+    setTextInput("");
+    console.log(goals);
+  };
+
+  const handleDelete = (id) => {
+    setGoals(goals.filter((goal) => goal.id !== id));
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>HELLO WORLD!!</Text>
-      <Text style={styles.text2}>I'm happy to use React Native</Text>
-      <Text style={styles.text2}>I'm happy to use React Native</Text>
-      <MyComp />
-      <Button
-        buttonStyle={styles.text2}
-        title="Click Me!"
-        onPress={() => alert("I'm happy to use React Native")}
+    <View style={styles.appConteiner}>
+      <GoalsInput
+        onAddGoal={addGoalHandler}
+        textInput={textInput}
+        onPressHandler={textInputHandler}
       />
+      <GoalsList goals={goals} onDelete={handleDelete} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  appConteiner: {
     flex: 1,
-    backgroundColor: "#08395a",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: 20,
-    color: "white",
-  },
-  text: {
-    color: "white",
-    fontSize: 50,
-  },
-  text2: {
-    color: "#95efeb",
-    fontSize: 30,
-    textAlign: "center",
-    margin: 10,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: "#9befeb",
-    borderRadius: 10,
-    backgroundColor: "#276d9c",
+    paddingTop: 15,
+    paddingHorizontal: 15,
   },
 });
