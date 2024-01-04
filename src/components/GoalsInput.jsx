@@ -1,37 +1,63 @@
-import { StyleSheet, TextInput, View, Button } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, TextInput, View, Button, Modal } from "react-native";
+import React from "react";
 
 export default function GoalsInput(props) {
-  const { textInput, onAddGoal, onPressHandler } = props;
+  const { textInput, onAddGoal, onPressHandler, isVisible, onCancel } = props;
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        style={styles.textInput}
-        placeholder="Add your goals!"
-        onChangeText={onPressHandler}
-        value={textInput}
-      />
-      <Button title="Add Goal" onPress={() => onAddGoal(textInput)} />
-    </View>
+    <Modal visible={isVisible} animationType="fade">
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Add your goals!"
+          onChangeText={onPressHandler}
+          value={textInput}
+        />
+        <View style={styles.buttonContainer}>
+          <View style={styles.button}>
+            <Button
+              title="Add Goal"
+              onPress={() => onAddGoal(textInput)}
+              color={"white"}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title="Cancel"
+              onPress={() => onCancel()}
+              color={"#ef5151"}
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
 const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-    marginBottom: 20,
+    padding: 16,
+    backgroundColor: "#5e0acc",
   },
   textInput: {
     borderWidth: 1,
     borderColor: "#cccccc",
-    width: "70%",
-    marginRight: 8,
+    width: "100%",
     padding: 8,
+    color: "white",
+    height: 40,
+    borderRadius: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 12,
+  },
+  button: {
+    width: "35%",
+    marginHorizontal: 8,
   },
 });

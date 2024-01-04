@@ -1,15 +1,25 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import React, { useState } from "react";
 import GoalsInput from "./src/components/GoalsInput";
 import GoalsList from "./src/components/GoalsList";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [goals, setGoals] = useState([]);
   const [textInput, setTextInput] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const textInputHandler = (text) => {
     setTextInput(text);
   };
+
+  function startAddGoal() {
+    setIsModalVisible(true);
+  }
+
+  function cancelAddGoal() {
+    setIsModalVisible(false);
+  }
 
   const addGoalHandler = (textInput) => {
     setGoals([
@@ -20,7 +30,7 @@ export default function App() {
       },
     ]);
     setTextInput("");
-    console.log(goals);
+    setIsModalVisible(false);
   };
 
   const handleDelete = (id) => {
@@ -28,21 +38,35 @@ export default function App() {
   };
 
   return (
-    <View style={styles.appConteiner}>
-      <GoalsInput
-        onAddGoal={addGoalHandler}
-        textInput={textInput}
-        onPressHandler={textInputHandler}
-      />
-      <GoalsList goals={goals} onDelete={handleDelete} />
-    </View>
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appConteiner}>
+        <GoalsInput
+          onAddGoal={addGoalHandler}
+          textInput={textInput}
+          onPressHandler={textInputHandler}
+          isVisible={isModalVisible}
+          onCancel={cancelAddGoal}
+        />
+        <View style={styles.buttonContainer}>
+          <Button title="Add New Goal" color="white" onPress={startAddGoal} />
+        </View>
+        <GoalsList goals={goals} onDelete={handleDelete} />
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   appConteiner: {
     flex: 1,
-    paddingTop: 15,
+    paddingTop: 50,
     paddingHorizontal: 15,
+  },
+  buttonContainer: {
+    backgroundColor: "#995ed799",
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 25,
   },
 });
